@@ -1,0 +1,356 @@
+openapi: 3.0.0
+
+info:
+  title: "Reference Data Service"
+  description: "Reference Data Service"
+  version: 1.0.0
+  
+tags: 
+  - name: "clients"
+    description: "Clients of your organisation"
+  
+  
+servers: 
+  - url: 'http://localhost:8080/v1'
+  
+paths:
+  /users/{role}:
+    post:
+      tags:
+        - "users"
+      summary: "add a new user"
+      parameters:
+        - name: "role"
+          in: "path"
+          required: true
+          schema:
+            type: string
+            enum:
+              - "REGULAR"
+              - "ADMIN"
+      requestBody:
+        required: true
+        description: "New uer object"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "201":
+          description: "User created"
+        "400":
+          description: "Bad Request"
+
+  /clients:
+    post:
+      tags: 
+        - "clients"
+      summary: "Add a new Client"
+      requestBody:
+        required: true
+        description: "New Client Object"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        "201":
+          description: "Client Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        "400":
+          description: "Bad Request"
+
+  /clients/{clientId}:
+    put:
+      tags:
+        - "clients"
+      summary: "Update existing client"
+      parameters:
+        - name: "clientId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        required: true
+        description: "Client object to be updated"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        "200":
+          description: "Client Updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        "400":
+          description: "Bad Request"
+
+    get:
+      tags:
+        - "clients"
+      summary: "Find client by id"
+      parameters:
+        - name: "clientId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Client not found"
+
+  /clients/fileUpload:
+    post:
+      tags:
+        - "clients"
+      summary: "Upload incremental client updates via csv file"
+      requestBody:
+        required: true
+        description: "CSV file containing clients data"
+        content:
+          multipart/form-data:
+            schema:
+              type: "object"
+              properties:
+                file:
+                  type: "string"
+                  format: "binary"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        "400":
+          description: "Bad Request"
+
+  /services:
+    get:
+      tags:
+        - "services"
+      summary: "Get paginated and sorted services"
+      parameters:
+        - name: "page"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+        - name: "size"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+        - name: "sort"
+          in: "query"
+          required: true
+          schema:
+            type: string
+            enum:
+              - "ASC"
+              - "DESC"
+        - name: "by"
+          in: "query"
+          required: false
+          schema:
+            type: string
+            enum:
+              - "code"
+              - "name"
+              - "unit"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        "400":
+          description: "Invalid pagination arguments"
+
+  /services/{serviceId}:
+    get:
+      tags:
+        - "services"
+      summary: "Find service by service id"
+      parameters:
+        - name: "serviceId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        "404":
+          description: "Service not found"
+  /services/fileUpload:
+    post:
+      tags:
+        - "services"
+      summary: "Upload incremental service updates via csv file"
+      requestBody:
+        required: true
+        description: "CSV file containing services data"
+        content:
+          multipart/form-data:
+            schema:
+              type: "object"
+              properties:
+                file:
+                  type: "string"
+                  format: "binary"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        "400":
+          description: "Bad Request"
+  /contracts/{contractId}:
+    put:
+      tags:
+        - "contracts"
+      summary: "Update existing contract"
+      parameters:
+        - name: "contractId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        required: true
+        description: "Contract object to be updated"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      responses:
+        "200":
+          description: "Contract Updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        "400":
+          description: "Bad Request"
+
+components:
+  schemas:
+    User:
+      type: "object"
+      required:
+        - email
+        - password
+        - clientId
+      properties:
+        email:
+          type: "string"
+          format: "email"
+        password:
+          type: "string"
+          format: "password"
+        clientId:
+          type: "integer"
+          format: "int64"
+    Client:
+      type: "object"
+      required: 
+        - clientId
+        - firstName
+        - lastName
+        - address
+      properties:
+        clientId:
+          type: "integer"
+          format: "int64"
+        firstName:
+          type: "string"
+          minLength: 1
+          maxLength: 50
+        lastName:
+          type: "string"
+          minLength: 1
+          maxLength: 50
+        address:
+          type: "string"
+          minLength: 1
+          maxLength: 200
+    Service:
+      type: "object"
+      required:
+        - code
+        - name
+        - unit
+      properties:
+        serviceId:
+          type: "integer"
+          format: "int64"
+        code:
+          type: "string"
+          minLength: 1
+          maxLength: 3
+        name:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+        unit:
+          type: "string"
+          minLength: 1
+          maxLength: 3
+        price:
+          type: "number"
+          format: "double"
+        vat:
+          type: "number"
+          format: "double"
+    Contract:
+      type: "object"
+      required:
+        - contractDate
+        - services
+      properties:
+        contractId:
+          type: "integer"
+          format: "int64"
+        contractDate:
+          type: "string"
+          format: "date"
+        services:
+          type: array
+          uniqueItems: true
+          items: {
+            $ref: '#/components/schemas/Service'
+          }
+    FileUploadResponse:
+      type: "object"
+      properties:
+        recordsProcessedCount:
+          type: "integer"
+          format: "int32"
