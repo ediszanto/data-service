@@ -1,0 +1,3 @@
+
+ALTER TABLE services
+ADD COLUMN type varchar(10) NOT NULL DEFAULT 'REGULAR';

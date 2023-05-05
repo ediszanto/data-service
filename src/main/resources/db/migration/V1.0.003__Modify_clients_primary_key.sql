@@ -1,0 +1,6 @@
+ALTER TABLE clients
+AUTO_INCREMENT = 1,
+ADD client_id bigint NOT NULL AUTO_INCREMENT,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (client_id),
+MODIFY COLUMN client_number bigint NOT NULL UNIQUE;

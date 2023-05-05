@@ -1,1 +1,15 @@
-
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/rds
+    username: rds
+    password: rds
+  flyway:
+    location: classpath:db/migration
+    schemas: rds
+    default-schema: rds
+    group: true
+    placeholder-replacement: true
+    url: jdbc:mysql://localhost:3306/rds
+    user: flyway
+    password: flyway
