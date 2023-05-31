@@ -21,7 +21,7 @@ public class ServiceEntity {
     @Column(name = "code", nullable = false, unique = true, length = 3)
     private String code;
 
-    @Column(name = "code", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Column(name = "unit", nullable = false, length = 3)

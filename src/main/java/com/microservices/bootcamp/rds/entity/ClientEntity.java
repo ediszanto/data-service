@@ -1,12 +1,11 @@
 package com.microservices.bootcamp.rds.entity;
 
+import com.microservices.bootcamp.rds.model.Client.TypeEnum;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -30,7 +29,7 @@ public class ClientEntity {
 
     @Enumerated
     @Column(name = "type", nullable = false, length = 7)
-    private String type;
+    private TypeEnum type;
 
     @Column(name = "address", nullable = false, length = 200)
     private String address;
