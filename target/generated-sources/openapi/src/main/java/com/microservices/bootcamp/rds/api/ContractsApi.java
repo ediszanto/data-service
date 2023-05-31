@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-04T10:43:56.443672+03:00[Europe/Bucharest]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-22T22:00:16.302827+03:00[Europe/Bucharest]")
 @Validated
 @Tag(name = "contracts", description = "the contracts API")
 public interface ContractsApi {

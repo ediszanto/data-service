@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class ClientsCsvLine {
+public class ClientCsvLine {
     @CsvBindByPosition(position = 0)
     private Long clientNumber;
 

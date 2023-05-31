@@ -11,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import static java.util.Objects.isNull;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.*;
+
 @Component
 @Slf4j
 public class ClientsApiDelegateImpl implements ClientsApiDelegate{
@@ -24,12 +28,15 @@ public class ClientsApiDelegateImpl implements ClientsApiDelegate{
 
     @Override
     public ResponseEntity<Client> clientsClientIdGet(Long clientId) {
-        return ClientsApiDelegate.super.clientsClientIdGet(clientId);
+        Client result = clientService.clientsClientIdGet(clientId);
+        if (isNull(result)) return notFound().build();
+        return ok(result);
     }
 
     @Override
     public ResponseEntity<Client> clientsClientIdPut(Long clientId, Client client) {
-        return ClientsApiDelegate.super.clientsClientIdPut(clientId, client);
+        Client result = clientService.clientsClientIdPut(clientId, client);
+        return ok(result);
     }
 
     @Override
@@ -44,9 +51,8 @@ public class ClientsApiDelegateImpl implements ClientsApiDelegate{
     }
 
     @Override
-    public ResponseEntity<Client> clientsPost(Client client) {
-        log.debug("Creating new Client --> {} ", client);
-//        return ClientsApiDelegate.super.clientsPost(client);
-        return new ResponseEntity<>(client, HttpStatus.CREATED);
+    public ResponseEntity<Client> clientsPost(Client model) {
+        Client result = clientService.cleintPost(model);
+        return status(CREATED).body(result);
     }
 }
